@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Lesson 10 - this</title>
+</head>
+<body>
+	<script>
+		//Задача 1
+		const rectangle = {
+			width: 20,
+			height: 40,
+			getSquare: function(){
+				return this.width * this.height;
+			}
+		}
+		console.log(rectangle.getSquare()); // 800
+
+		//Задача 2 сделали на уроке
+
+		//Задача 3
+		getUserName = function () {
+			return this.name;
+		}
+		const user = {
+			name: 'Abraham',
+			getName: getUserName,
+		}
+		console.log(user.getName()); // Abraham
+		console.log(getUserName.call(user)); // Abraham
+
+		//Задача 4
+		let object = {
+			height: 10,
+			heightPlusOne: function() {
+				return this.height += 1;
+			},
+		}
+		console.log(object.height); // 10
+		console.log(object.heightPlusOne()); // 11
+		console.log(object.heightPlusOne()); // 12
+
+		//Задача 5
+		const numerator = {
+			value: 1,
+			double: function(){
+				this.value *= 2; 
+				return this;
+			},
+			plusOne: function(){
+				this.value += 1; 
+				return this;
+			},
+			minusOne: function (){
+				this.value -= 1; 
+				return this;
+			},
+		}
+		numerator.double().plusOne().minusOne();
+		console.log(numerator.value); // 2
+
+		//Задача 6 (чтобы не коментить задачу №3 сделал не user, a user2 )
+		const user2 = {name: 'Abraham'};
+		otherUser = {
+			name: 'John',
+			getName: function() {return this.name;},
+		}
+		user2.getName; // undefined - метод getName вне зоны видимости объекта user
+		user2.getName = otherUser.getName; // у объекта user создали метод и присвоили ему функцию getName из объекта otherUser
+		user2.getName(); //Abraham - вызвали метод getName который вернул name из области видимости объекта user
+		otherUser.getName(); //John	 - вызвали метод getName который вернул name из области видимости объекта otherUser
+
+		// 2й блок задач по this
+		//Задача 1
+		function getList(){return this.list;}
+		let users = {
+			length: 4,
+			list: ['Abraham', 'James', 'John', 'Steven'],
+		}
+		getList(); // undefined - нет контекста
+		users.getList = getList;
+		users.getList(); // создали метод getList и присвоили ему функцию = выводит массив ["Abraham", "James", "John", "Steven"]
+		getList.call(users); // вызвали метод getList в контексте users = выводит массив ["Abraham", "James", "John", "Steven"]
+
+		//Задача 2
+		let product = {
+			retailPrice: 30,
+			quantity: 150,
+			totalPrice: function(){return this.retailPrice * this.quantity;}
+		}
+		console.log(product.totalPrice()); // 4500
+
+		//Задача 3
+		let detail = {
+			retailPrice: 10,
+			quantity: 20,
+		}
+		console.log(product.totalPrice.call(detail)); //200
+
+		//Задача 4
+		let sizes = {width:5, height:10,};
+		getSquare = function () {return this.width * this.height;}
+		console.log(getSquare.call(sizes)); // 50
+
+		//Задача 5 
+		let numbers = [4, 12, 0, 10, -2, 4];		
+		var getNumbers = Math.min.apply(this, numbers);
+		console.log(getNumbers); // -2
+
+		//Задача 6
+		const element = {
+			height: '15px',
+			marginTop: '5px',
+			marginBottom: '5px',
+			getFullHeight: function(){
+				return parseInt(this.height) + parseInt(this.marginTop) + parseInt(this.marginBottom) + 'px';
+			}
+		};
+		console.log(element.getFullHeight()); // 25px
+
+		const block = {
+			height: '5px',
+			marginTop: '3px',
+			marginBottom: '3px',
+		}
+		console.log(element.getFullHeight.call(block)); // 11px
+
+		//Задача 7 (в задаче выше element уже задекларировано константой )
+		let element2 = {
+			height: 25,
+			getHeight: function(){return this.height;},
+		};
+		let getElementHeight = element2.getHeight.bind(element2);
+		console.log(getElementHeight());
+
+
+	</script>
+	
+
+</body>
+</html>
